@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memorize The Living Christ</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        body.light-mode {
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+        body.dark-mode {
+            background-color: #212529;
+            color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            margin-top: 20px;
+        }
+        #text-display, #flashcard-display {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        body.dark-mode #text-display, body.dark-mode #flashcard-display {
+            background-color: #343a40;
+            color: #f8f9fa;
+        }
+        .hidden-word {
+            background-color: #ccc;
+            color: #ccc;
+            padding: 0 4px;
+            border-radius: 3px;
+        }
+        body.dark-mode .hidden-word {
+            background-color: #495057;
+            color: #495057;
+        }
+        .first-letter {
+            color: #007bff;
+        }
+        body.dark-mode .first-letter {
+            color: #0d6efd;
+        }
+        .controls {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        body.dark-mode .controls {
+            background-color: #343a40;
+        }
+        .slider-label {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        #hide-percentage {
+            width: 100%;
+        }
+        h1 {
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .progress-section {
+            margin-bottom: 20px;
+        }
+        .progress-bar {
+            transition: width 0.3s;
+        }
+        .flashcard-controls {
+            text-align: center;
+        }
+        .flashcard-controls button {
+            margin: 0 10px;
+        }
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        @media (max-width: 576px) {
+            #text-display, #flashcard-display {
+                font-size: 1rem;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            .controls {
+                padding: 10px;
+            }
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <div class="container">
+        <button class="btn btn-secondary theme-toggle" id="theme-toggle">Dark Mode</button>
+        <h1>Memorize The Living Christ</h1>
+        <div class="progress-section">
+            <h5>Progress: <span id="progress-percentage">0%</span></h5>
+            <div class="progress">
+                <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <div id="progress-checkboxes" class="mt-2"></div>
+        </div>
+        <div class="controls">
+            <div class="mb-3">
+                <label for="paragraph-select" class="form-label">Select Paragraph</label>
+                <select id="paragraph-select" class="form-select">
+                    <option value="all">All Paragraphs</option>
+                    <!-- Options populated by JavaScript -->
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="mode-select" class="form-label">Display Mode</label>
+                <select id="mode-select" class="form-select">
+                    <option value="full">Full Text</option>
+                    <option value="hide">Hide Words</option>
+                    <option value="first">First Letter Only</option>
+                    <option value="flashcard">Flashcard Mode</option>
+                </select>
+            </div>
+            <div id="hide-controls" class="mb-3" style="display: none;">
+                <label for="hide-percentage" class="slider-label">Percentage of Words to Hide: <span id="percentage-value">50</span>%</label>
+                <input type="range" id="hide-percentage" class="form-range" min="10" max="90" value="50">
+            </div>
+        </div>
+        <div id="text-display"></div>
+        <div id="flashcard-display" style="display: none;">
+            <p id="flashcard-text"></p>
+            <div class="flashcard-controls">
+                <button id="prev-sentence" class="btn btn-primary">Previous</button>
+                <button id="next-sentence" class="btn btn-primary">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Placeholder for The Living Christ text (abridged; replace with full text)
+        const fullText = `
+As we commemorate the birth of Jesus Christ two millennia ago, we offer our testimony of the reality of His matchless life and the infinite virtue of His great atoning sacrifice. None other has had so profound an influence upon all who have lived and will yet live upon the earth.
+
+He was the Great Jehovah of the Old Testament, the Messiah of the New. Under the direction of His Father, He was the creator of the earth. “All things were made by him; and without him was not any thing made that was made” (John 1:3). Though sinless, He was baptized to fulfill all righteousness. He “went about doing good” (Acts 10:38), yet was despised for it. His gospel was a message of peace and goodwill. He entreated all to follow His example. He walked the roads of Palestine, healing the sick, causing the blind to see, and raising the dead. He taught the truths of eternity, the reality of our premortal existence, the purpose of our life on earth, and the potential for the sons and daughters of God in the life to come.
+
+He instituted the sacrament as a reminder of His great atoning sacrifice. He was arrested and condemned on spurious charges, convicted to satisfy a mob, and sentenced to die on Calvary’s cross. He gave His life to atone for the sins of all mankind. His was a great vicarious gift in behalf of all who would ever live upon the earth.
+
+We solemnly testify that His life, which is central to all human history, neither began in Bethlehem nor concluded on Calvary. He was the Firstborn of the Father, the Only Begotten Son in the flesh, the Redeemer of the world.
+
+He rose from the grave to “become the firstfruits of them that slept” (1 Corinthians 15:20). As Risen Lord, He visited among those He had loved in life. He also ministered among His “other sheep” (John 10:16) in ancient America. In the modern world, He and His Father appeared to the boy Joseph Smith, ushering in the long-promised “dispensation of the fulness of times” (Ephesians 1:10).
+
+Of the Living Christ, the Prophet Joseph wrote: “His eyes were as a flame of fire; the hair of his head was white like the pure snow; his countenance shone above the brightness of the sun; and his voice was as the sound of the rushing of great waters, even the voice of Jehovah, saying:
+
+“I am the first and the last; I am he who liveth, I am he who was slain; I am your advocate with the Father” (D&C 110:3–4).
+
+Of Him the Prophet also declared: “And now, after the many testimonies which have been given of him, this is the testimony, last of all, which we give of him: That he lives!
+
+“For we saw him, even on the right hand of God; and we heard the voice bearing record that he is the Only Begotten of the Father—
+
+“That by him, and through him, and of him, the worlds are and were created, and the inhabitants thereof are begotten sons and daughters unto God” (D&C 76:22–24).
+
+We declare in words of solemnity that His priesthood and His Church have been restored upon the earth—“built upon the foundation of … apostles and prophets, Jesus Christ himself being the chief corner stone” (Ephesians 2:20).
+
+We testify that He will someday return to earth. “And the glory of the Lord shall be revealed, and all flesh shall see it together” (Isaiah 40:5). He will rule as King of Kings and reign as Lord of Lords, and every knee shall bend and every tongue shall speak in worship before Him. Each of us will stand to be judged of Him according to our works and the desires of our hearts.
+
+We bear testimony, as His duly ordained Apostles—that Jesus is the Living Christ, the immortal Son of God. He is the great King Immanuel, who stands today on the right hand of His Father. He is the light, the life, and the hope of the world. His way is the path that leads to happiness in this life and eternal life in the world to come. God be thanked for the matchless gift of His divine Son.`;
+
+        // Split text into paragraphs
+        const paragraphs = fullText.split('\n\n');
+
+        // State variables
+        let currentMode = 'full';
+        let hidePercentage = 50;
+        let selectedParagraph = 'all';
+        let currentSentenceIndex = 0;
+        let sentences = [];
+        let progress = Array(paragraphs.length).fill(false); // Track memorized paragraphs
+
+        // Load settings from local storage
+        function loadSettings() {
+            const settings = JSON.parse(localStorage.getItem('livingChristSettings')) || {};
+            currentMode = settings.mode || 'full';
+            hidePercentage = settings.hidePercentage || 50;
+            selectedParagraph = settings.selectedParagraph || 'all';
+            progress = settings.progress || Array(paragraphs.length).fill(false);
+            document.body.className = settings.theme || 'light-mode';
+            document.getElementById('theme-toggle').textContent = settings.theme === 'dark-mode' ? 'Light Mode' : 'Dark Mode';
+        }
+
+        // Save settings to local storage
+        function saveSettings() {
+            localStorage.setItem('livingChristSettings', JSON.stringify({
+                mode: currentMode,
+                hidePercentage: hidePercentage,
+                selectedParagraph: selectedParagraph,
+                theme: document.body.className,
+                progress: progress
+            }));
+        }
+
+        // Populate paragraph select
+        function populateParagraphSelect() {
+            const select = document.getElementById('paragraph-select');
+            paragraphs.forEach((_, i) => {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `Paragraph ${i + 1}`;
+                select.appendChild(option);
+            });
+            select.value = selectedParagraph;
+        }
+
+        // Populate progress checkboxes
+        function populateProgressCheckboxes() {
+            const container = document.getElementById('progress-checkboxes');
+            container.innerHTML = '';
+            paragraphs.forEach((_, i) => {
+                const div = document.createElement('div');
+                div.className = 'form-check form-check-inline';
+                div.innerHTML = `
+                    <input class="form-check-input" type="checkbox" id="progress-${i}" ${progress[i] ? 'checked' : ''}>
+                    <label class="form-check-label" for="progress-${i}">P${i + 1}</label>
+                `;
+                container.appendChild(div);
+                document.getElementById(`progress-${i}`).addEventListener('change', (e) => {
+                    progress[i] = e.target.checked;
+                    updateProgress();
+                    saveSettings();
+                });
+            });
+            updateProgress();
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const completed = progress.filter(Boolean).length;
+            const percentage = Math.round((completed / paragraphs.length) * 100);
+            document.getElementById('progress-percentage').textContent = `${percentage}%`;
+            document.getElementById('progress-bar').style.width = `${percentage}%`;
+            document.getElementById('progress-bar').setAttribute('aria-valuenow', percentage);
+        }
+
+        // Split paragraph into sentences
+        function getSentences(paragraph) {
+            return paragraph.split(/(?<=[.!?])\s+/).filter(s => s.trim());
+        }
+
+        // Display text based on mode
+        function displayText() {
+            const textDisplay = document.getElementById('text-display');
+            const flashcardDisplay = document.getElementById('flashcard-display');
+            textDisplay.style.display = currentMode === 'flashcard' ? 'none' : 'block';
+            flashcardDisplay.style.display = currentMode === 'flashcard' ? 'block' : 'none';
+
+            if (currentMode === 'flashcard') {
+                displayFlashcard();
+                return;
+            }
+
+            textDisplay.innerHTML = '';
+            const displayParagraphs = selectedParagraph === 'all' ? paragraphs : [paragraphs[selectedParagraph]];
+
+            displayParagraphs.forEach(paragraph => {
+                const p = document.createElement('p');
+                const words = paragraph.split(' ');
+
+                if (currentMode === 'full') {
+                    p.textContent = paragraph;
+                } else if (currentMode === 'hide') {
+                    p.innerHTML = words.map(word => {
+                        if (/^[.,!?;]$/.test(word)) return word;
+                        return Math.random() < hidePercentage / 100
+                            ? `<span class="hidden-word">${word}</span>`
+                            : word;
+                    }).join(' ');
+                } else if (currentMode === 'first') {
+                    p.innerHTML = words.map(word => {
+                        if (/^[.,!?;]$/.test(word)) return word;
+                        const firstLetter = word[0];
+                        const rest = word.slice(1);
+                        return `<span class="first-letter">${firstLetter}</span><span class="hidden-word">${rest}</span>`;
+                    }).join(' ');
+                }
+
+                textDisplay.appendChild(p);
+            });
+        }
+
+        // Display flashcard
+        function displayFlashcard() {
+            const flashcardText = document.getElementById('flashcard-text');
+            const paragraph = selectedParagraph === 'all' ? fullText : paragraphs[selectedParagraph];
+            sentences = getSentences(paragraph);
+
+            if (currentSentenceIndex >= sentences.length) currentSentenceIndex = 0;
+            if (currentSentenceIndex < 0) currentSentenceIndex = sentences.length - 1;
+
+            flashcardText.textContent = sentences[currentSentenceIndex] || 'No sentences available.';
+        }
+
+        // Initialize
+        loadSettings();
+        populateParagraphSelect();
+        populateProgressCheckboxes();
+        document.getElementById('mode-select').value = currentMode;
+        document.getElementById('hide-percentage').value = hidePercentage;
+        document.getElementById('percentage-value').textContent = hidePercentage;
+        document.getElementById('hide-controls').style.display = currentMode === 'hide' ? 'block' : 'none';
+        displayText();
+
+        // Event listeners
+        document.getElementById('mode-select').addEventListener('change', (e) => {
+            currentMode = e.target.value;
+            document.getElementById('hide-controls').style.display = currentMode === 'hide' ? 'block' : 'none';
+            currentSentenceIndex = 0; // Reset for flashcard mode
+            displayText();
+            saveSettings();
+        });
+
+        document.getElementById('hide-percentage').addEventListener('input', (e) => {
+            hidePercentage = e.target.value;
+            document.getElementById('percentage-value').textContent = hidePercentage;
+            displayText();
+            saveSettings();
+        });
+
+        document.getElementById('paragraph-select').addEventListener('change', (e) => {
+            selectedParagraph = e.target.value;
+            currentSentenceIndex = 0; // Reset for flashcard mode
+            displayText();
+            saveSettings();
+        });
+
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            document.body.className = document.body.className === 'light-mode' ? 'dark-mode' : 'light-mode';
+            document.getElementById('theme-toggle').textContent = document.body.className === 'dark-mode' ? 'Light Mode' : 'Dark Mode';
+            saveSettings();
+        });
+
+        document.getElementById('prev-sentence').addEventListener('click', () => {
+            currentSentenceIndex--;
+            displayFlashcard();
+        });
+
+        document.getElementById('next-sentence').addEventListener('click', () => {
+            currentSentenceIndex++;
+            displayFlashcard();
+        });
+    </script>
+</body>
+</html>
