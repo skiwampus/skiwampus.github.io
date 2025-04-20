@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="https://use.typekit.net/ypa5rqy.css">
     <style>
         body {
-            font-family: 'adobe-jenson-pro', serif;
+            font-family: 'source-sans-pro', sans-serif;
             transition: background-color 0.3s, color 0.3s;
             margin: 0;
             padding: 0;
@@ -42,7 +42,8 @@
             margin: 10px 0 20px;
         }
         #text-display, #flashcard-display {
-            background-color: #fff;
+            font-weight: 300;
+			background-color: #fff;
             padding: 20px;
             border-radius: 4px;
             font-size: 1.3rem;
@@ -122,6 +123,7 @@
         .flashcard-controls {
             font-family: 'source-sans-pro', sans-serif;
 			text-align: center;
+
         }
         .flashcard-controls .btn {
             background-color: #005566;
@@ -227,7 +229,9 @@
         // Placeholder for The Living Christ text (abridged; replace with full text)
         const fullText = `As we commemorate the birth of Jesus Christ two millennia ago, we offer our testimony of the reality of His matchless life and the infinite virtue of His great atoning sacrifice. None other has had so profound an influence upon all who have lived and will yet live upon the earth.
 
-He was the Great Jehovah of the Old Testament, the Messiah of the New. Under the direction of His Father, He was the creator of the earth. “All things were made by him; and without him was not any thing made that was made” (John 1:3). Though sinless, He was baptized to fulfill all righteousness. He “went about doing good” (Acts 10:38), yet was despised for it. His gospel was a message of peace and goodwill. He entreated all to follow His example. He walked the roads of Palestine, healing the sick, causing the blind to see, and raising the dead. He taught the truths of eternity, the reality of our premortal existence, the purpose of our life on earth, and the potential for the sons and daughters of God in the life to come.
+He was the Great Jehovah of the Old Testament, the Messiah of the New. Under the direction of His Father, He was the creator of the earth. “All things were made by him; and without him was not any thing made that was made” (John 1:3). Though sinless, He was baptized to fulfill all righteousness. He “went about doing good” (Acts 10:38), yet was despised for it. 
+
+His gospel was a message of peace and goodwill. He entreated all to follow His example. He walked the roads of Palestine, healing the sick, causing the blind to see, and raising the dead. He taught the truths of eternity, the reality of our premortal existence, the purpose of our life on earth, and the potential for the sons and daughters of God in the life to come.
 
 He instituted the sacrament as a reminder of His great atoning sacrifice. He was arrested and condemned on spurious charges, convicted to satisfy a mob, and sentenced to die on Calvary’s cross. He gave His life to atone for the sins of all mankind. His was a great vicarious gift in behalf of all who would ever live upon the earth.
 
@@ -349,20 +353,28 @@ We bear testimony, as His duly ordained Apostles—that Jesus is the Living Chri
                 } else if (currentMode === 'hide') {
                     p.innerHTML = words.map(word => {
                         if (/^[.,!?;]$/.test(word)) return word;
-                        return Math.random() < hidePercentage / 100
-                            ? `<span class="hidden-word">${word}</span>`
-                            : word;
+                        const isHidden = Math.random() < hidePercentage / 100;
+                        return `<span class="${isHidden ? 'hidden-word' : 'visible-word'}" data-word="${word}" data-hidden="${isHidden}">${isHidden ? word : word}</span>`;
                     }).join(' ');
                 } else if (currentMode === 'first') {
                     p.innerHTML = words.map(word => {
                         if (/^[.,!?;]$/.test(word)) return word;
                         const firstLetter = word[0];
                         const rest = word.slice(1);
-                        return `<span class="first-letter">${firstLetter}</span><span class="hidden-word">${rest}</span>`;
+                        return `<span class="first-letter">${firstLetter}</span><span class="hidden-word" data-word="${rest}" data-hidden="true">${rest}</span>`;
                     }).join(' ');
                 }
 
                 textDisplay.appendChild(p);
+            });
+
+            // Add click event listeners for toggling
+            document.querySelectorAll('.hidden-word, .visible-word').forEach(span => {
+                span.addEventListener('click', () => {
+                    const isHidden = span.getAttribute('data-hidden') === 'true';
+                    span.className = isHidden ? 'visible-word' : 'hidden-word';
+                    span.setAttribute('data-hidden', !isHidden);
+                });
             });
         }
 
