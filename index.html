@@ -6,95 +6,163 @@
     <title>Memorize The Living Christ</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts: Source Sans Pro and Cinzel -->
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&family=Cinzel:wght@400&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Source Sans Pro', sans-serif;
             transition: background-color 0.3s, color 0.3s;
+            margin: 0;
+            padding: 0;
         }
         body.light-mode {
-            background-color: #f8f9fa;
-            color: #343a40;
+            background-color: #fff;
+            color: #1a1a1a;
         }
         body.dark-mode {
-            background-color: #212529;
+            background-color: #2f2f2f;
             color: #f8f9fa;
         }
         .container {
             max-width: 800px;
-            margin-top: 20px;
+            margin: 40px auto;
+            padding: 0 15px;
+        }
+        h1 {
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 2.5rem;
+            color: #1a1a1a;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        body.dark-mode h1 {
+            color: #f8f9fa;
+        }
+        hr {
+            border-top: 1px solid #6f818f;
+            margin: 10px 0 20px;
         }
         #text-display, #flashcard-display {
-            background-color: white;
+            background-color: #fff;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            font-size: 1.1rem;
-            line-height: 1.6;
+            border-radius: 4px;
+            font-size: 1.3rem;
+            line-height: 1.8;
             margin-bottom: 20px;
         }
         body.dark-mode #text-display, body.dark-mode #flashcard-display {
-            background-color: #343a40;
+            background-color: #3a3a3a;
             color: #f8f9fa;
         }
         .hidden-word {
-            background-color: #ccc;
-            color: #ccc;
+            background-color: #d3d3d3;
+            color: #d3d3d3;
             padding: 0 4px;
             border-radius: 3px;
         }
         body.dark-mode .hidden-word {
-            background-color: #495057;
-            color: #495057;
+            background-color: #5a5a5a;
+            color: #5a5a5a;
         }
         .first-letter {
-            color: #007bff;
+            color: #005566;
         }
         body.dark-mode .first-letter {
-            color: #0d6efd;
+            color: #17a2b8;
         }
         .controls {
-            background-color: #e9ecef;
+            background-color: #f5f6f5;
             padding: 15px;
-            border-radius: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
         }
         body.dark-mode .controls {
-            background-color: #343a40;
+            background-color: #3a3a3a;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+        body.dark-mode .form-label {
+            color: #f8f9fa;
+        }
+        .form-select, .form-range {
+            border-color: #6f818f;
         }
         .slider-label {
-            font-size: 0.9rem;
+            font-size: 1rem;
             margin-bottom: 5px;
         }
         #hide-percentage {
             width: 100%;
         }
-        h1 {
-            font-size: 1.8rem;
-            text-align: center;
-            margin-bottom: 20px;
-        }
         .progress-section {
             margin-bottom: 20px;
         }
+        .progress-section h5 {
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 1.2rem;
+            color: #1a1a1a;
+        }
+        body.dark-mode .progress-section h5 {
+            color: #f8f9fa;
+        }
         .progress-bar {
+            background-color: #005566;
             transition: width 0.3s;
+        }
+        .form-check-label {
+            font-size: 0.9rem;
+            color: #1a1a1a;
+        }
+        body.dark-mode .form-check-label {
+            color: #f8f9fa;
         }
         .flashcard-controls {
             text-align: center;
         }
-        .flashcard-controls button {
+        .flashcard-controls .btn {
+            background-color: #005566;
+            border-color: #005566;
             margin: 0 10px;
+        }
+        .flashcard-controls .btn:hover {
+            background-color: #003f4b;
+            border-color: #003f4b;
         }
         .theme-toggle {
             position: absolute;
             top: 20px;
             right: 20px;
+            background-color: #005566;
+            border-color: #005566;
+            color: #fff;
+			display: none;
         }
+        .theme-toggle:hover {
+            background-color: #003f4b;
+            border-color: #003f4b;
+        }
+        /* Optional background image (replace with Church-approved image) */
+        /*
+        body.light-mode {
+            background-image: url('path-to-christ-image.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+        }
+        */
         @media (max-width: 576px) {
-            #text-display, #flashcard-display {
-                font-size: 1rem;
-            }
             h1 {
-                font-size: 1.5rem;
+                font-size: 1.8rem;
+            }
+            #text-display, #flashcard-display {
+                font-size: 1.1rem;
+                padding: 15px;
             }
             .controls {
                 padding: 10px;
@@ -102,15 +170,16 @@
             .theme-toggle {
                 top: 10px;
                 right: 10px;
+                font-size: 0.9rem;
             }
         }
     </style>
 </head>
 <body class="light-mode">
     <div class="container">
-        <button class="btn btn-secondary theme-toggle" id="theme-toggle">Dark Mode</button>
+        <button class="btn theme-toggle" id="theme-toggle">Dark Mode</button>
         <h1>Memorize The Living Christ</h1>
-        
+        <hr>
         <div class="controls">
             <div class="mb-3">
                 <label for="paragraph-select" class="form-label">Select Paragraph</label>
@@ -154,8 +223,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Placeholder for The Living Christ text (abridged; replace with full text)
-        const fullText = `
-As we commemorate the birth of Jesus Christ two millennia ago, we offer our testimony of the reality of His matchless life and the infinite virtue of His great atoning sacrifice. None other has had so profound an influence upon all who have lived and will yet live upon the earth.
+        const fullText = `As we commemorate the birth of Jesus Christ two millennia ago, we offer our testimony of the reality of His matchless life and the infinite virtue of His great atoning sacrifice. None other has had so profound an influence upon all who have lived and will yet live upon the earth.
 
 He was the Great Jehovah of the Old Testament, the Messiah of the New. Under the direction of His Father, He was the creator of the earth. “All things were made by him; and without him was not any thing made that was made” (John 1:3). Though sinless, He was baptized to fulfill all righteousness. He “went about doing good” (Acts 10:38), yet was despised for it. His gospel was a message of peace and goodwill. He entreated all to follow His example. He walked the roads of Palestine, healing the sick, causing the blind to see, and raising the dead. He taught the truths of eternity, the reality of our premortal existence, the purpose of our life on earth, and the potential for the sons and daughters of God in the life to come.
 
