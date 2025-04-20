@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Memorize The Living Christ</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://use.typekit.net/ypa5rqy.css">
     <style>
@@ -14,6 +13,14 @@
             margin: 0;
             padding: 0;
         }
+		a, a:link, a:visited {
+			text-decoration: none;
+			color: #1a1a1a;	
+		}
+		a.dark-mode, a:link, a:visited {
+			text-decoration: none;
+			color: #f8f9fa;	
+		}
         body.light-mode {
             background-color: #fff;
             color: #1a1a1a;
@@ -46,7 +53,7 @@
 			background-color: #fff;
             padding: 20px;
             border-radius: 4px;
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             line-height: 1.8;
             margin-bottom: 20px;
         }
@@ -63,12 +70,6 @@
         body.dark-mode .hidden-word {
             background-color: #5a5a5a;
             color: #5a5a5a;
-        }
-        .first-letter {
-            color: #005566;
-        }
-        body.dark-mode .first-letter {
-            color: #17a2b8;
         }
         .controls {
             font-family: 'source-sans-pro', sans-serif;
@@ -94,6 +95,61 @@
             font-size: 1rem;
             margin-bottom: 5px;
         }
+		/* Custom slider styling */
+		#hide-percentage::-webkit-slider-thumb {
+			background: #005566;
+			cursor: pointer;
+			height: 1.2rem;
+			width: 1.2rem;
+			border-radius: 50%;
+			border: 0;
+		}
+		#hide-percentage::-webkit-slider-thumb:hover,
+		#hide-percentage::-webkit-slider-thumb:active {
+			background: #003f4b;
+		}
+		#hide-percentage::-moz-range-thumb {
+			background: #005566;
+			cursor: pointer;
+			height: 1.2rem;
+			width: 1.2rem;
+			border-radius: 50%;
+			border: 0;
+		}
+		#hide-percentage::-moz-range-thumb:hover,
+		#hide-percentage::-moz-range-thumb:active {
+			background: #003f4b;
+		}
+		#hide-percentage::-webkit-slider-runnable-track {
+			background: #d3d3d3;
+			height: 0.4rem;
+			border-radius: 4px;
+		}
+		#hide-percentage::-moz-range-track {
+			background: #d3d3d3;
+			height: 0.4rem;
+			border-radius: 4px;
+		}
+		body.dark-mode #hide-percentage::-webkit-slider-thumb {
+			background: #17a2b8;
+		}
+		body.dark-mode #hide-percentage::-webkit-slider-thumb:hover,
+		body.dark-mode #hide-percentage::-webkit-slider-thumb:active {
+			background: #0d6efd;
+		}
+		body.dark-mode #hide-percentage::-moz-range-thumb {
+			background: #17a2b8;
+		}
+		body.dark-mode #hide-percentage::-moz-range-thumb:hover,
+		body.dark-mode #hide-percentage::-moz-range-thumb:active {
+			background: #0d6efd;
+		}
+		body.dark-mode #hide-percentage::-webkit-slider-runnable-track {
+			background: #5a5a5a;
+		}
+		body.dark-mode #hide-percentage::-moz-range-track {
+			background: #5a5a5a;
+		}
         #hide-percentage {
             width: 100%;
         }
@@ -141,13 +197,13 @@
             background-color: #005566;
             border-color: #005566;
             color: #fff;
-			display: none;
+			
         }
         .theme-toggle:hover {
             background-color: #003f4b;
             border-color: #003f4b;
         }
-        /* Optional background image (replace with Church-approved image) */
+        /* Optional background image (replace with image) */
         /*
         body.light-mode {
             background-image: url('path-to-christ-image.jpg');
@@ -215,21 +271,21 @@
             </div>
         </div>
 		<div class="progress-section">
-            <h5>Progress: <span id="progress-percentage">0%</span></h5>
+            <h5>Track Progress: <span id="progress-percentage">0%</span></h5>
             <div class="progress">
                 <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
             <div id="progress-checkboxes" class="mt-2"></div>
         </div>
+		<p>Created to help you memorize <a href="https://www.churchofjesuschrist.org/study/scriptures/the-living-christ-the-testimony-of-the-apostles/the-living-christ-the-testimony-of-the-apostles">"The Living Christ: The Testimony of the Apostles"</a>. Not endorsed by The Church of Jesus Christ of Latter-day Saints.</p>
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Placeholder for The Living Christ text (abridged; replace with full text)
         const fullText = `As we commemorate the birth of Jesus Christ two millennia ago, we offer our testimony of the reality of His matchless life and the infinite virtue of His great atoning sacrifice. None other has had so profound an influence upon all who have lived and will yet live upon the earth.
 
-He was the Great Jehovah of the Old Testament, the Messiah of the New. Under the direction of His Father, He was the creator of the earth. “All things were made by him; and without him was not any thing made that was made” (John 1:3). Though sinless, He was baptized to fulfill all righteousness. He “went about doing good” (Acts 10:38), yet was despised for it. 
+He was the Great Jehovah of the Old Testament, the Messiah of the New. Under the direction of His Father, He was the creator of the earth. “All things were made by him; and without him was not any thing made that was made” (John 1:3). Though sinless, He was baptized to fulfill all righteousness. He “went about doing good” (Acts 10:38), yet was despised for it.
 
 His gospel was a message of peace and goodwill. He entreated all to follow His example. He walked the roads of Palestine, healing the sick, causing the blind to see, and raising the dead. He taught the truths of eternity, the reality of our premortal existence, the purpose of our life on earth, and the potential for the sons and daughters of God in the life to come.
 
