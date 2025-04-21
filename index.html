@@ -32,7 +32,7 @@
         }
         h1 {
             font-family: 'source-sans-pro', sans-serif;
-            font-size: 2.5rem;
+            font-size: 2.0rem;
             color: #1a1a1a;
             text-align: center;
             margin-bottom: 10px;
@@ -49,8 +49,8 @@
 			background-color: #fff;
             padding: 20px;
             border-radius: 4px;
-            font-size: 1.5rem;
-            line-height: 1.8;
+            font-size: 1.3rem;
+            line-height: 1.7;
             margin-bottom: 20px;
         }
         body.dark-mode #text-display, body.dark-mode #flashcard-display {
@@ -62,10 +62,19 @@
             color: #d3d3d3;
             padding: 0 4px;
             border-radius: 3px;
+			cursor: pointer;
         }
         body.dark-mode .hidden-word {
             background-color: #5a5a5a;
             color: #5a5a5a;
+        }
+		.visible-word {
+            color: #1a1a1a;
+            padding: 0 4px;
+            cursor: pointer;
+        }
+        body.dark-mode .visible-word {
+            color: #f8f9fa;
         }
         .controls {
             font-family: 'source-sans-pro', sans-serif;
@@ -198,6 +207,7 @@
         .theme-toggle:hover {
             background-color: #003f4b;
             border-color: #003f4b;
+			color: #fff;
         }
         /* Optional background image (replace with image) */
         /*
@@ -409,13 +419,23 @@ We bear testimony, as His duly ordained Apostles—that Jesus is the Living Chri
                         return `<span class="${isHidden ? 'hidden-word' : 'visible-word'}" data-word="${word}" data-hidden="${isHidden}">${isHidden ? word : word}</span>`;
                     }).join(' ');
                 } else if (currentMode === 'first') {
-                    p.innerHTML = words.map(word => {
-                        if (/^[.,!?;]$/.test(word)) return word;
-                        const firstLetter = word[0];
-                        const rest = word.slice(1);
-                        return `<span class="first-letter">${firstLetter}</span><span class="hidden-word" data-word="${rest}" data-hidden="true">${rest}</span>`;
-                    }).join(' ');
-                }
+					p.innerHTML = words.map(word => {
+						if (/^[.,!?;]$/.test(word)) return word;
+						// Find the first alphabetic letter or number
+						let firstLetterIndex = 0;
+						while (firstLetterIndex < word.length && !/[a-zA-Z0-9]/.test(word[firstLetterIndex])) {
+							firstLetterIndex++;
+						}
+						if (firstLetterIndex >= word.length) {
+							// No alphabetic letters or numbers; treat as punctuation
+							return word;
+						}
+						const firstLetter = word[firstLetterIndex];
+						const prefix = word.slice(0, firstLetterIndex);
+						const rest = word.slice(firstLetterIndex + 1);
+						return `${prefix}<span class="first-letter">${firstLetter}</span><span class="hidden-word" data-word="${prefix}${rest}" data-hidden="true">${rest}</span>`;
+					}).join(' ');
+				}
 
                 textDisplay.appendChild(p);
             });
