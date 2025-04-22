@@ -70,7 +70,7 @@
         }
 		.visible-word {
             color: #1a1a1a;
-            padding: 0 4px;
+            padding: 0;
             cursor: pointer;
         }
         body.dark-mode .visible-word {
@@ -410,9 +410,10 @@
             textDisplay.innerHTML = '';
             const displayParagraphs = selectedParagraph === 'all' ? paragraphs : [paragraphs[selectedParagraph]];
 
-            displayParagraphs.forEach(paragraph => {
+            displayParagraphs.forEach((paragraph, index) => {
                 const p = document.createElement('p');
                 const words = paragraph.split(' ');
+				p.setAttribute('data-index',index);
 
                 if (currentMode === 'full') {
                     p.textContent = paragraph;
