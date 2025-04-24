@@ -447,7 +447,7 @@ function updateProgress() {
 
 // Split paragraph into sentences
 function getSentences(paragraph) {
-    return paragraph.split(/(?<=[.!?—])\s+/).filter(s => s.trim());
+    return paragraph.split(/(?<=[.!?—;])\s+/).filter(s => s.trim());
 }
 
 // Display text based on mode
