@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Template Editor</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f0f2f5;
+      color: #1a1a1a;
+    }
+
+    .app {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 360px;
+      min-width: 360px;
+      background: #fff;
+      border-right: 1px solid #dde1e7;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .sidebar-header {
+      padding: 18px 20px 14px;
+      background: #1c1c2e;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .sidebar-header h1 {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .sidebar-header p {
+      font-size: 11px;
+      color: #8888aa;
+      margin-top: 3px;
+    }
+
+    .sidebar-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px;
+    }
+
+    .sidebar-footer {
+      padding: 14px;
+      border-top: 1px solid #dde1e7;
+      background: #fff;
+      flex-shrink: 0;
+    }
+
+    /* ── Sections ── */
+    .section {
+      border: 1px solid #e4e7ec;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .section-header {
+      padding: 8px 12px;
+      background: #f7f8fa;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #6b7280;
+      border-bottom: 1px solid #e4e7ec;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      user-select: none;
+    }
+
+    .section-header .chevron {
+      font-size: 10px;
+      transition: transform 0.15s;
+    }
+
+    .section.collapsed .chevron {
+      transform: rotate(-90deg);
+    }
+
+    .section-body {
+      padding: 12px;
+    }
+
+    .section.collapsed .section-body {
+      display: none;
+    }
+
+    /* ── Form controls ── */
+    .field {
+      margin-bottom: 10px;
+    }
+
+    .field:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: #4b5563;
+      margin-bottom: 4px;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 6px 9px;
+      border: 1px solid #d1d5db;
+      border-radius: 5px;
+      font-size: 13px;
+      color: #111827;
+      background: #fff;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+    }
+
+    /* Color row */
+    .color-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .color-swatch-wrap {
+      position: relative;
+      width: 34px;
+      height: 30px;
+      border-radius: 5px;
+      border: 1px solid #d1d5db;
+      overflow: hidden;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    input[type="color"] {
+      position: absolute;
+      inset: -4px;
+      width: calc(100% + 8px);
+      height: calc(100% + 8px);
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .color-row .hex-input {
+      flex: 1;
+    }
+
+    /* Toggle group */
+    .toggle-group {
+      display: flex;
+      border: 1px solid #d1d5db;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .toggle-btn {
+      flex: 1;
+      padding: 6px 8px;
+      background: #fff;
+      border: none;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      color: #6b7280;
+      transition: background 0.12s, color 0.12s;
+    }
+
+    .toggle-btn:not(:last-child) {
+      border-right: 1px solid #d1d5db;
+    }
+
+    .toggle-btn.active {
+      background: #1c1c2e;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    /* Logo upload */
+    .logo-upload-area {
+      border: 2px dashed #d1d5db;
+      border-radius: 6px;
+      padding: 14px 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      position: relative;
+    }
+
+    .logo-upload-area:hover {
+      border-color: #6366f1;
+      background: #f5f3ff;
+    }
+
+    .logo-upload-area input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    #logo-thumb {
+      max-height: 44px;
+      max-width: 160px;
+      margin: 0 auto 6px;
+      display: block;
+      object-fit: contain;
+    }
+
+    .upload-hint {
+      font-size: 10px;
+      color: #9ca3af;
+      pointer-events: none;
+    }
+
+    /* Export button */
+    .export-btn {
+      width: 100%;
+      padding: 10px;
+      background: #1c1c2e;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+      transition: background 0.15s;
+    }
+
+    .export-btn:hover {
+      background: #2e2e4e;
+    }
+
+    .export-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* ── Preview panel ── */
+    .preview-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .preview-toolbar {
+      padding: 9px 20px;
+      background: #fff;
+      border-bottom: 1px solid #dde1e7;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      color: #6b7280;
+      flex-shrink: 0;
+    }
+
+    .preview-toolbar .brand-pill {
+      background: #f0f0ff;
+      color: #4338ca;
+      border: 1px solid #c7d2fe;
+      border-radius: 20px;
+      padding: 1px 9px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .preview-toolbar .spacer {
+      flex: 1;
+    }
+
+    .preview-wrapper {
+      flex: 1;
+      overflow: auto;
+      background: #c8cad0;
+      display: flex;
+      justify-content: center;
+      padding: 24px 20px;
+    }
+
+    #preview-frame {
+      width: 640px;
+      min-width: 640px;
+      height: 1px;
+      border: none;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+      border-radius: 2px;
+      transition: height 0.1s;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app">
+
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>Email Template Editor</h1>
+        <p>Customize branding and export</p>
+      </div>
+
+      <div class="sidebar-body">
+
+        <!-- Brand -->
+        <div class="section" id="sec-brand">
+          <div class="section-header" onclick="toggleSection('sec-brand')">Brand Name <span class="chevron">▾</span>
+          </div>
+          <div class="section-body">
+            <div class="field">
+              <label for="brand-name">Brand Name</label>
+              <input type="text" id="brand-name" value="WKND" placeholder="Enter brand name">
+            </div>
+          </div>
+        </div>
+
+        <!-- Logo -->
+        <div class="section" id="sec-logo">
+          <div class="section-header" onclick="toggleSection('sec-logo')">Logo <span class="chevron">▾</span></div>
+          <div class="section-body">
+            <div class="field">
+              <label>Logo Image (base64 encoded on upload)</label>
+              <div class="logo-upload-area" id="logo-drop">
+                <img id="logo-thumb" src="" alt="Logo preview">
+                <p class="upload-hint">Click to upload a new logo image</p>
+                <input type="file" id="logo-upload" accept="image/*">
+              </div>
+            </div>
+            <div class="field">
+              <label>Logo Height: <span id="logo-height-val">45</span>px</label>
+              <input type="range" id="logo-height" min="20" max="120" value="45" style="width:100%; accent-color:#1c1c2e;">
+            </div>
+            <div class="field">
+              <label>Logo Top &amp; Bottom Margin: <span id="logo-margin-val">40</span>px</label>
+              <input type="range" id="logo-margin" min="0" max="80" value="40" style="width:100%; accent-color:#1c1c2e;">
+            </div>
+            <div class="field">
+              <label>Logo Container Background</label>
+              <div class="color-row">
+                <div class="color-swatch-wrap"><input type="color" id="logo-bg-color" value="#ffffff"></div>
+                <input type="text" id="logo-bg-hex" class="hex-input" value="#ffffff" maxlength="7">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA Button -->
+        <div class="section" id="sec-cta">
+          <div class="section-header" onclick="toggleSection('sec-cta')">CTA Button <span class="chevron">▾</span></div>
+          <div class="section-body">
+            <div class="field">
+              <label>Corner Shape</label>
+              <div class="toggle-group">
+                <button class="toggle-btn active" data-radius="0">Square (0px)</button>
+                <button class="toggle-btn" data-radius="25">Rounded (25px)</button>
+              </div>
+            </div>
+            <div class="field">
+              <label>Background Color</label>
+              <div class="color-row">
+                <div class="color-swatch-wrap"><input type="color" id="cta-bg-color" value="#ffffff"></div>
+                <input type="text" id="cta-bg-hex" class="hex-input" value="#ffffff" maxlength="7">
+              </div>
+            </div>
+            <div class="field">
+              <label>Text Color</label>
+              <div class="color-row">
+                <div class="color-swatch-wrap"><input type="color" id="cta-text-color" value="#000000"></div>
+                <input type="text" id="cta-text-hex" class="hex-input" value="#000000" maxlength="7">
+              </div>
+            </div>
+            <div class="field">
+              <label>Border Color</label>
+              <div class="color-row">
+                <div class="color-swatch-wrap"><input type="color" id="cta-border-color" value="#000000"></div>
+                <input type="text" id="cta-border-hex" class="hex-input" value="#000000" maxlength="7">
+              </div>
+            </div>
+            <div class="field">
+              <label>Border Width (px)</label>
+              <input type="number" id="cta-border-width" value="2" min="0" max="20" style="width:80px;">
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="section" id="sec-footer">
+          <div class="section-header" onclick="toggleSection('sec-footer')">Footer <span class="chevron">▾</span></div>
+          <div class="section-body">
+            <div class="field">
+              <label>Background Color</label>
+              <div class="color-row">
+                <div class="color-swatch-wrap"><input type="color" id="footer-bg-color" value="#000000"></div>
+                <input type="text" id="footer-bg-hex" class="hex-input" value="#000000" maxlength="7">
+              </div>
+            </div>
+            <div class="field">
+              <label>Text &amp; Link Color</label>
+              <div class="color-row">
+                <div class="color-swatch-wrap"><input type="color" id="footer-text-color" value="#ffffff"></div>
+                <input type="text" id="footer-text-hex" class="hex-input" value="#ffffff" maxlength="7">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /sidebar-body -->
+
+      <div class="sidebar-footer">
+        <button class="export-btn" id="export-btn">&#8595; Export template-[brand].html</button>
+      </div>
+    </aside>
+
+    <!-- ── Preview ── -->
+    <main class="preview-panel">
+      <div class="preview-toolbar">
+        Live Preview &mdash;
+        <span class="brand-pill" id="preview-brand-label">WKND</span>
+        <span class="spacer"></span>
+        <span>600px email width</span>
+      </div>
+      <div class="preview-wrapper">
+        <iframe id="preview-frame" title="Template Preview"></iframe>
+      </div>
+    </main>
+
+  </div><!-- /app -->
+
+  <script>
+    // ─────────────────────────────────────────────────────────────────────────────
+    // Embedded template HTML
+    // ─────────────────────────────────────────────────────────────────────────────
+    const TEMPLATE_HTML = `<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
+    xmlns:o="urn:schemas-microsoft-com:office:office">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
+    <title class="brand">WKND</title>
+
+    <!--[if mso]>
+<style type="text/css">
+body, table, td {
+font-family:Helvetica Neue, Helvetica, Verdana, Arial, sans-serif !important;
+}
+.button {
+background:transparent !important;
+}
+</style>
+<xml>
+  <o:OfficeDocumentSettings>
+    <o:AllowPNG/>
+    <o:PixelsPerInch>96</o:PixelsPerInch>
+  </o:OfficeDocumentSettings>
+</xml>
+<![endif]-->
+
+    <style type="text/css">
+        @import url("https://use.typekit.net/qap0nun.css");
+        @media (prefers-color-scheme: dark) {}
+
+        .ReadMsgBody {
+            width: 100%;
+        }
+
+        .ExternalClass {
+            width: 100%;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 0 auto;
+        }
+
+        a,
+        a:visited {
+            color: #1473E6;
+            text-decoration: none;
+        }
+
+        .legal a {
+            text-decoration: underline;
+        }
+
+        /* iOS BLUE LINKS */
+        a[x-apple-data-detectors] {
+            color: inherit !important;
+            text-decoration: none !important;
+            font-size: inherit !important;
+            font-family: inherit !important;
+            font-weight: inherit !important;
+            line-height: inherit !important;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Source San Pro', sans-serif;
+            align-items: center;
+        }
+        .pod {
+            margin: 40px 0;
+        }
+        .logo{
+            height: 45px;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #fff;
+            /* Background color to white */
+            color: #000;
+            /* Text color to black */
+            border: 2px solid #000;
+            /* Border color to black */
+            padding: 10px 20px;
+            text-decoration: none;
+            font-family: 'Source Sans Pro', Arial, sans-serif;
+            font-weight: 600;
+            /* Semibold */
+            font-size: 14px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .footer-colors {
+            background-color: #000;
+            color: #fff;
+        }
+
+        .footer {
+            padding: 10px;
+            margin-top: 20px;
+            margin-left: 0px;
+            text-align: center;
+        }
+
+        .footer a {
+            color: #fff;
+            text-decoration: none;
+            display: block;
+            margin: 15px 0;
+
+        }
+
+        .footer-table {
+            width: 100%;
+            margin-left: -5px;
+            /* Reduced left margin */
+        }
+
+        .footer-table td {
+            vertical-align: top;
+            padding: 16px;
+            font-size: 14px;
+        }
+
+        .footer-table td:first-child {
+            width: 35%;
+            margin-top: 10px;
+            /* Added margin at the top */
+        }
+
+        .footer-table td:last-child {
+            width: 65%;
+            text-align: left;
+        }
+
+        .mobile {
+            border-spacing: 0;
+            display: none !important;
+            height: 0;
+            max-height: 0;
+            mso-hide: all;
+            overflow: hidden;
+            visibility: hidden;
+            width: 0;
+        }
+
+        @media only screen and (max-width:480px) {
+            u~div {
+                min-width: 100vw;
+            }
+
+            div>u~div {
+                min-width: 100%;
+            }
+
+            .web {
+                display: none !important;
+            }
+
+            .mobile {
+                display: block !important;
+                width: auto !important;
+                overflow: visible !important;
+                height: auto !important;
+                max-height: inherit !important;
+                font-size: 18px !important;
+                line-height: 26px !important;
+                visibility: visible !important;
+            }
+
+            .email-width {
+                width: 84% !important;
+            }
+
+            .full-width {
+                width: 100% !important;
+            }
+
+            .mobile-image {
+                height: auto !important;
+                width: 100% !important;
+            }
+
+            .social {
+                float: left !important;
+                padding-top: 60px !important;
+                text-align: left !important;
+            }
+
+            .headline {
+                font-size: 32px !important;
+                line-height: 42px !important;
+                color: #b60e0e;
+                font-family: 'Source San Pro', sans-serif;
+                font-size: 32px;
+                font-weight: 600;
+                font-feature-settings: 'ss04' on;
+                letter-spacing: -0.03em;
+                line-height: 42px;
+                padding-top: 60px;
+            }
+        }
+    </style>
+</head>
+
+<body bgcolor="#E4E4E4"
+    style="background-color:#E4E4E4; margin:0; padding:0;-webkit-font-smoothing:antialiased;width:100% !important;-webkit-text-size-adjust:none;"
+    topmargin="0">
+    <div style="font-size:1px; color:#E4E4E4; display:none; overflow:hidden; visibility:hidden;" id="preheader">
+        {{pre_header}}
+        &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+    </div>
+
+    <table width="100%" bgcolor="#E4E4E4" style="background-color:#E4E4E4;" border="0" cellpadding="0" cellspacing="0"
+        role="presentation">
+        <tr>
+            <td>
+                <table class="full-width" align="center" width="600" border="0" cellpadding="0" cellspacing="0"
+                    role="presentation" style="width:600px;">
+                    <tr>
+                        <td bgcolor="#ffffff" style="background-color:#ffffff;">
+
+                            <!-- logo centered -->
+                            <table class="full-width" align="center" width="600" border="0" cellpadding="0"
+                                cellspacing="0" role="presentation" style="width:600px;">
+                                <tr>
+                                    <td class="logo-container">
+                                        <img id="logo" class="logo"
+                                            src="data:image/png;base64,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"
+                                            alt="WKND" style="margin: 40px auto; display: block; max-width:600px" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                      <div class="pod">
+                                        <!-- BEGIN pod1 -->
+                                        <!-- BEGIN pod1 image -->
+                                        <table class="email-width" align="center" width="500" border="0" cellpadding="0"
+                                            cellspacing="0" role="presentation" style="width:500px;">
+                                            <tr>
+                                                <td
+                                                    style="color:#000000; font-family:'Source San Pro', sans-serif; font-size:22px; line-height:24px;">
+                                                    <a href="#" target="_blank" style="color:#1473E6;">
+                                                        <img class="mobile-image" src="{{pod1_image}}" width="500"
+                                                            height="auto" border="0" hspace="0" vspace="0"
+                                                            style="color:#000000; font-family:'Source San Pro', sans-serif; font-size:22px; line-height:24px; display:block; vertical-align:top;" />
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <!-- END pod1 image -->
+
+                                        <!-- BEGIN pod1 copy -->
+                                        <table class="email-width" align="center" width="500" border="0" cellpadding="0"
+                                            cellspacing="0" role="presentation" style="width:500px;">
+                                            <tr>
+                                                <td class="headline"
+                                                    style="color:#000000; font-family:'Source San Pro', sans-serif; font-size:32px; font-weight:600; font-feature-settings:'ss04' on; letter-spacing:-0.03em; line-height:42px; padding-top:20px;">
+                                                    {{pod1_headline}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td
+                                                    style="color:#2C2C2C; font-family:'Source San Pro', sans-serif; font-size:18px; line-height:26px; padding-top:20px;">
+                                                    {{pod1_body}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div style="text-align: center; margin: 20px 0;">
+                                                        <a href="#" class="cta-button">{{pod1_cta}}</a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <!-- END pod1 copy -->
+                                        <!-- END pod1 -->
+                                      </div>
+
+                                      <div class="pod">
+                                        <!-- BEGIN pod2 -->
+                                        <!-- BEGIN pod2 image -->
+                                        <table class="email-width" align="center" width="500" border="0" cellpadding="0"
+                                            cellspacing="0" role="presentation" style="width:500px;">
+                                            <tr>
+                                                <td
+                                                    style="color:#000000; font-family:'Source San Pro', sans-serif; font-size:22px; line-height:24px;">
+                                                    <a href="#" target="_blank" style="color:#1473E6;">
+                                                        <img class="mobile-image" src="{{pod2_image}}" width="500"
+                                                            height="auto" border="0" hspace="0" vspace="0"
+                                                            style="color:#000000; font-family:'Source San Pro', sans-serif; font-size:22px; line-height:24px; display:block; vertical-align:top;" />
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <!-- END pod2 image -->
+
+                                        <!-- BEGIN pod2 copy -->
+                                        <table class="email-width" align="center" width="500" border="0" cellpadding="0"
+                                            cellspacing="0" role="presentation" style="width:500px;">
+                                            <tr>
+                                                <td class="headline"
+                                                    style="color:#000000; font-family:'Source San Pro', sans-serif; font-size:32px; font-weight:600; font-feature-settings:'ss04' on; letter-spacing:-0.03em; line-height:42px; padding-top:20px;">
+                                                    {{pod2_headline}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td
+                                                    style="color:#2C2C2C; font-family:'Source San Pro', sans-serif; font-size:18px; line-height:26px; padding-top:20px;">
+                                                    {{pod2_body}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div style="text-align: center; margin: 20px 0;">
+                                                        <a href="#" class="cta-button">{{pod2_cta}}</a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <!-- END pod2 copy -->
+                                        <!-- END pod2 -->
+                                      </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="footer-colors" style="background-color:#000000;">
+
+                                        <!-- footer -->
+                                        <table class="email-width" align="center" width="500" border="0" cellpadding="0"
+                                            cellspacing="0" role="presentation" style="width:500px;">
+                                            <tr>
+                                                <td>
+                                                    <div class="footer">
+                                                        <table class="footer-table" cellpadding="0" cellspacing="0"
+                                                            border="0" width="100%">
+                                                            <tr>
+                                                                <td style="text-align: left;">
+                                                                    <a href="#">Help Center</a>
+                                                                    <a href="#">Unsubscribe</a>
+                                                                    <a href="#">Terms</a>
+                                                                </td>
+                                                                <td>
+                                                                    <p>This is a promotional email from <span
+                                                                            class="brand">WKND</span>.
+                                                                    </p>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>`;
+
+    // ─────────────────────────────────────────────────────────────────────────────
+    // State
+    // ─────────────────────────────────────────────────────────────────────────────
+    const state = {
+      brandName: 'WKND',
+      logoSrc: null,
+      logoHeight: 45,
+      logoMargin: 40,
+      logoBgColor: '#ffffff',
+      ctaBgColor: '#ffffff',
+      ctaTextColor: '#000000',
+      ctaBorderColor: '#000000',
+      ctaBorderWidth: 2,
+      ctaBorderRadius: 0,
+      footerBgColor: '#000000',
+      footerTextColor: '#ffffff',
+    };
+
+    // Extract original logo src from template
+    (function initLogoThumb() {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(TEMPLATE_HTML, 'text/html');
+      const logo = doc.querySelector('#logo');
+      if (logo) {
+        state.logoSrc = logo.getAttribute('src');
+        document.getElementById('logo-thumb').src = state.logoSrc;
+      }
+    })();
+
+    // ─────────────────────────────────────────────────────────────────────────────
+    // Build modified HTML
+    // ─────────────────────────────────────────────────────────────────────────────
+    function buildHTML() {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(TEMPLATE_HTML, 'text/html');
+
+      // Brand name
+      doc.querySelectorAll('.brand').forEach(el => {
+        el.textContent = state.brandName;
+      });
+
+      // Logo src
+      const logo = doc.querySelector('#logo');
+      if (logo && state.logoSrc) {
+        logo.setAttribute('src', state.logoSrc);
+      }
+
+      // Inject override styles
+      const overrideStyle = doc.createElement('style');
+      overrideStyle.id = 'brand-overrides';
+      overrideStyle.textContent = `
+.cta-button {
+  background-color: ${state.ctaBgColor} !important;
+  color: ${state.ctaTextColor} !important;
+  border: ${state.ctaBorderWidth}px solid ${state.ctaBorderColor} !important;
+  border-radius: ${state.ctaBorderRadius}px !important;
+}
+.footer-colors {
+  background-color: ${state.footerBgColor} !important;
+  color: ${state.footerTextColor} !important;
+}
+.footer a {
+  color: ${state.footerTextColor} !important;
+}
+.footer p { color: ${state.footerTextColor} !important; }
+.logo-container {
+  background-color: ${state.logoBgColor} !important;
+}
+.logo {
+  height: ${state.logoHeight}px !important;
+  width: auto !important;
+  margin-top: ${state.logoMargin}px !important;
+  margin-bottom: ${state.logoMargin}px !important;
+}
+  `.trim();
+      doc.head.appendChild(overrideStyle);
+
+      return '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────────
+    // Update preview
+    // ─────────────────────────────────────────────────────────────────────────────
+    const previewFrame = document.getElementById('preview-frame');
+
+    // Register resize handler once so it isn't re-assigned on every keystroke.
+    // Reset to 1px before measuring so the frame's own height doesn't inflate scrollHeight.
+    previewFrame.addEventListener('load', () => {
+      try {
+        previewFrame.style.height = '1px';
+        const h = previewFrame.contentDocument.body.scrollHeight;
+        previewFrame.style.height = Math.max(800, h) + 'px';
+      } catch (e) { }
+    });
+
+    function updatePreview() {
+      previewFrame.srcdoc = buildHTML();
+      document.getElementById('preview-brand-label').textContent = state.brandName || 'WKND';
+    }
+
+    // Initial render
+    updatePreview();
+
+    // ─────────────────────────────────────────────────────────────────────────────
+    // Controls wiring
+    // ─────────────────────────────────────────────────────────────────────────────
+
+    // Brand name
+    document.getElementById('brand-name').addEventListener('input', e => {
+      state.brandName = e.target.value;
+      updatePreview();
+    });
+
+    // Logo upload
+    document.getElementById('logo-upload').addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = evt => {
+        state.logoSrc = evt.target.result;
+        document.getElementById('logo-thumb').src = state.logoSrc;
+        updatePreview();
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById('logo-height').addEventListener('input', e => {
+      state.logoHeight = parseInt(e.target.value, 10);
+      document.getElementById('logo-height-val').textContent = state.logoHeight;
+      updatePreview();
+    });
+
+    document.getElementById('logo-margin').addEventListener('input', e => {
+      state.logoMargin = parseInt(e.target.value, 10);
+      document.getElementById('logo-margin-val').textContent = state.logoMargin;
+      updatePreview();
+    });
+
+    // CTA rounded toggle
+    document.querySelectorAll('.toggle-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.ctaBorderRadius = parseInt(btn.dataset.radius, 10);
+        updatePreview();
+      });
+    });
+
+    // CTA border width
+    document.getElementById('cta-border-width').addEventListener('input', e => {
+      state.ctaBorderWidth = Math.max(0, parseInt(e.target.value, 10) || 0);
+      updatePreview();
+    });
+
+    // Color pair helper: syncs color picker ↔ hex text input
+    function wireColorPair(colorId, hexId, stateKey) {
+      const colorEl = document.getElementById(colorId);
+      const hexEl = document.getElementById(hexId);
+
+      colorEl.addEventListener('input', () => {
+        hexEl.value = colorEl.value;
+        state[stateKey] = colorEl.value;
+        updatePreview();
+      });
+
+      hexEl.addEventListener('input', () => {
+        let val = hexEl.value.trim();
+        if (!val.startsWith('#')) val = '#' + val;
+        if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+          colorEl.value = val;
+          state[stateKey] = val;
+          updatePreview();
+        }
+      });
+    }
+
+    wireColorPair('logo-bg-color', 'logo-bg-hex', 'logoBgColor');
+    wireColorPair('cta-bg-color', 'cta-bg-hex', 'ctaBgColor');
+    wireColorPair('cta-text-color', 'cta-text-hex', 'ctaTextColor');
+    wireColorPair('cta-border-color', 'cta-border-hex', 'ctaBorderColor');
+    wireColorPair('footer-bg-color', 'footer-bg-hex', 'footerBgColor');
+    wireColorPair('footer-text-color', 'footer-text-hex', 'footerTextColor');
+
+    // ─────────────────────────────────────────────────────────────────────────────
+    // Export
+    // ─────────────────────────────────────────────────────────────────────────────
+    document.getElementById('export-btn').addEventListener('click', () => {
+      const html = buildHTML();
+      const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const safeName = (state.brandName || 'brand')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '') || 'brand';
+      a.href = url;
+      a.download = `template-${safeName}.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    // ─────────────────────────────────────────────────────────────────────────────
+    // Section collapse
+    // ─────────────────────────────────────────────────────────────────────────────
+    function toggleSection(id) {
+      document.getElementById(id).classList.toggle('collapsed');
+    }
+  </script>
+
+</body>
+
+</html>
