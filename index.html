@@ -18,50 +18,12 @@
 <body class="light-mode">
     <div class="container">
 <h1>Skiwampus</h1>
-<hr>
-<div class="controls">
-    <div class="mb-3">
-<label for="paragraph-select" class="form-label">Select Paragraph</label>
-<select id="paragraph-select" class="form-select">
-    <option value="all">All Paragraphs</option>
-    <!-- Options populated by JavaScript -->
-</select>
-    </div>
-    <div class="mb-3">
-<label for="mode-select" class="form-label">Display Mode</label>
-<select id="mode-select" class="form-select">
-    <option value="full">Full Text</option>
-    <option value="hide">Hide Words</option>
-    <option value="first">First Letter Only</option>
-    <option value="flashcard">Flashcard Mode</option>
-    <option value="flashcard-first">Flashcard with First Word</option>
-</select>
-    </div>
-    <div id="hide-controls" class="mb-3" style="display: none;">
-<label for="hide-percentage" class="slider-label">Percentage of Words to Hide: <span id="percentage-value">50</span>%</label>
-<input type="range" id="hide-percentage" class="form-range" min="10" max="90" value="50">
-    </div>
-</div>
-<div id="text-display"></div>
-<div id="flashcard-display" style="display: none;">
-    <div class="flashcard-container">
-<div id="prev-arrow-box" class="arrow-box"><i class="bi bi-chevron-left"></i></div>
-<p id="flashcard-text"></p>
-<div id="next-arrow-box" class="arrow-box"><i class="bi bi-chevron-right"></i></div>
-    </div>
-    <div class="flashcard-controls">
-<button id="prev-sentence" class="btn btn-primary">Previous</button>
-<button id="next-sentence" class="btn btn-primary">Next</button>
-    </div>
-</div>
-<div class="progress-section">
-    <h5>Track Progress: <span id="progress-percentage">0%</span></h5>
-    <div class="progress">
-<div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-    </div>
-    <div id="progress-checkboxes" class="mt-2"></div>
-</div>
-<p>Created to help you memorize <a href="https://www.churchofjesuschrist.org/study/scriptures/the-living-christ-the-testimony-of-the-apostles/the-living-christ-the-testimony-of-the-apostles" target="_blank">"The Living Christ: The Testimony of the Apostles"</a>. Not endorsed by The Church of Jesus Christ of Latter-day Saints.</p>
+<p>
+    <ul>
+        <li><a href="/the-living-christ.html" target="_blank">Memorize The Living Christ: The Testimony of the Apostles</a></li>
+        <li><a href="/o-christo-vivo.html" target="_blank">Memorize O Cristo Vivo: O Testemunho dos Apóstolos</a></li>
+    </ul>
+</p>
 <button class="btn theme-toggle" id="theme-toggle">Dark Mode</button>
     </div>
 
