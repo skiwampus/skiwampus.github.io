@@ -247,36 +247,6 @@
       pointer-events: none;
     }
 
-    /* Font select */
-    select {
-      width: 100%;
-      padding: 6px 9px;
-      border: 1px solid #d1d5db;
-      border-radius: 5px;
-      font-size: 13px;
-      color: #111827;
-      background: #fff;
-      cursor: pointer;
-      transition: border-color 0.15s;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236b7280'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 10px center;
-      padding-right: 28px;
-    }
-    select:focus {
-      outline: none;
-      border-color: #6366f1;
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
-    }
-    .font-row {
-      display: flex;
-      gap: 8px;
-      align-items: flex-end;
-    }
-    .font-row .font-select-wrap { flex: 1; }
-    .font-row .color-swatch-wrap { margin-bottom: 1px; }
-
     /* Export button */
     .export-btn {
       width: 100%;
@@ -412,70 +382,6 @@
           </div>
         </div>
 
-        <!-- Fonts -->
-        <div class="section" id="sec-fonts">
-          <div class="section-header" onclick="toggleSection('sec-fonts')">Fonts <span class="chevron">▾</span></div>
-          <div class="section-body">
-
-            <div class="field">
-              <label>Headline Font &amp; Color</label>
-              <div class="font-row">
-                <div class="font-select-wrap">
-                  <select id="headline-font">
-                    <option value="inherit">— Original —</option>
-                    <optgroup label="Sans-serif">
-                      <option value="Roboto">Roboto</option>
-                      <option value="Open Sans">Open Sans</option>
-                      <option value="Inter">Inter</option>
-                      <option value="Montserrat">Montserrat</option>
-                      <option value="Poppins">Poppins</option>
-                      <option value="Lato">Lato</option>
-                    </optgroup>
-                    <optgroup label="Serif">
-                      <option value="Playfair Display">Playfair Display</option>
-                      <option value="Merriweather">Merriweather</option>
-                      <option value="Lora">Lora</option>
-                      <option value="Roboto Slab">Roboto Slab</option>
-                      <option value="Noto Serif">Noto Serif</option>
-                      <option value="PT Serif">PT Serif</option>
-                    </optgroup>
-                  </select>
-                </div>
-                <div class="color-swatch-wrap"><input type="color" id="headline-color" value="#000000"></div>
-              </div>
-            </div>
-
-            <div class="field">
-              <label>Body Text Font &amp; Color</label>
-              <div class="font-row">
-                <div class="font-select-wrap">
-                  <select id="body-font">
-                    <option value="inherit">— Original —</option>
-                    <optgroup label="Sans-serif">
-                      <option value="Roboto">Roboto</option>
-                      <option value="Open Sans">Open Sans</option>
-                      <option value="Inter">Inter</option>
-                      <option value="Montserrat">Montserrat</option>
-                      <option value="Poppins">Poppins</option>
-                      <option value="Lato">Lato</option>
-                    </optgroup>
-                    <optgroup label="Serif">
-                      <option value="Playfair Display">Playfair Display</option>
-                      <option value="Merriweather">Merriweather</option>
-                      <option value="Lora">Lora</option>
-                      <option value="Roboto Slab">Roboto Slab</option>
-                      <option value="Noto Serif">Noto Serif</option>
-                      <option value="PT Serif">PT Serif</option>
-                    </optgroup>
-                  </select>
-                </div>
-                <div class="color-swatch-wrap"><input type="color" id="body-color" value="#2c2c2c"></div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
         <!-- CTA Button -->
         <div class="section" id="sec-cta">
           <div class="section-header" onclick="toggleSection('sec-cta')">CTA Button <span class="chevron">▾</span></div>
@@ -485,32 +391,6 @@
               <div class="toggle-group">
                 <button class="toggle-btn active" data-radius="0">Square (0px)</button>
                 <button class="toggle-btn" data-radius="25">Rounded (25px)</button>
-              </div>
-            </div>
-            <div class="field">
-              <label>CTA Font</label>
-              <div class="font-row">
-                <div class="font-select-wrap">
-                  <select id="cta-font">
-                    <option value="inherit">— Original —</option>
-                    <optgroup label="Sans-serif">
-                      <option value="Roboto">Roboto</option>
-                      <option value="Open Sans">Open Sans</option>
-                      <option value="Inter">Inter</option>
-                      <option value="Montserrat">Montserrat</option>
-                      <option value="Poppins">Poppins</option>
-                      <option value="Lato">Lato</option>
-                    </optgroup>
-                    <optgroup label="Serif">
-                      <option value="Playfair Display">Playfair Display</option>
-                      <option value="Merriweather">Merriweather</option>
-                      <option value="Lora">Lora</option>
-                      <option value="Roboto Slab">Roboto Slab</option>
-                      <option value="Noto Serif">Noto Serif</option>
-                      <option value="PT Serif">PT Serif</option>
-                    </optgroup>
-                  </select>
-                </div>
               </div>
             </div>
             <div class="field">
@@ -784,7 +664,7 @@ background:transparent !important;
                 font-size: 32px !important;
                 line-height: 42px !important;
                 color: #b60e0e;
-                font-family: 'Source Sans Pro', sans-serif;
+                font-family: 'Source San Pro', sans-serif;
                 font-size: 32px;
                 font-weight: 600;
                 font-feature-settings: 'ss04' on;
@@ -832,11 +712,11 @@ background:transparent !important;
                                             cellspacing="0" role="presentation" style="width:500px;">
                                             <tr>
                                                 <td
-                                                    style="color:#000000; font-family:'Source Sans Pro', sans-serif; font-size:22px; line-height:24px;">
+                                                    style="color:#000000; font-family:'Source San Pro', sans-serif; font-size:22px; line-height:24px;">
                                                     <a href="#" target="_blank" style="color:#1473E6;">
                                                         <img class="mobile-image" src="{{pod1_image}}" width="500"
                                                             height="auto" border="0" hspace="0" vspace="0"
-                                                            style="color:#000000; font-family:'Source Sans Pro', sans-serif; font-size:22px; line-height:24px; display:block; vertical-align:top;" />
+                                                            style="color:#000000; font-family:'Source San Pro', sans-serif; font-size:22px; line-height:24px; display:block; vertical-align:top;" />
                                                     </a>
                                                 </td>
                                             </tr>
@@ -848,12 +728,12 @@ background:transparent !important;
                                             cellspacing="0" role="presentation" style="width:500px;">
                                             <tr>
                                                 <td class="headline"
-                                                    style="color:#000000; font-family:'Source Sans Pro', sans-serif; font-size:32px; font-weight:600; font-feature-settings:'ss04' on; letter-spacing:-0.03em; line-height:42px; padding-top:20px;">
+                                                    style="color:#000000; font-family:'Source San Pro', sans-serif; font-size:32px; font-weight:600; font-feature-settings:'ss04' on; letter-spacing:-0.03em; line-height:42px; padding-top:20px;">
                                                     {{pod1_headline}}</td>
                                             </tr>
                                             <tr>
-                                                <td class="pod-body"
-                                                    style="color:#2C2C2C; font-family:'Source Sans Pro', sans-serif; font-size:18px; line-height:26px; padding-top:20px;">
+                                                <td
+                                                    style="color:#2C2C2C; font-family:'Source San Pro', sans-serif; font-size:18px; line-height:26px; padding-top:20px;">
                                                     {{pod1_body}}</td>
                                             </tr>
                                             <tr>
@@ -875,11 +755,11 @@ background:transparent !important;
                                             cellspacing="0" role="presentation" style="width:500px;">
                                             <tr>
                                                 <td
-                                                    style="color:#000000; font-family:'Source Sans Pro', sans-serif; font-size:22px; line-height:24px;">
+                                                    style="color:#000000; font-family:'Source San Pro', sans-serif; font-size:22px; line-height:24px;">
                                                     <a href="#" target="_blank" style="color:#1473E6;">
                                                         <img class="mobile-image" src="{{pod2_image}}" width="500"
                                                             height="auto" border="0" hspace="0" vspace="0"
-                                                            style="color:#000000; font-family:'Source Sans Pro', sans-serif; font-size:22px; line-height:24px; display:block; vertical-align:top;" />
+                                                            style="color:#000000; font-family:'Source San Pro', sans-serif; font-size:22px; line-height:24px; display:block; vertical-align:top;" />
                                                     </a>
                                                 </td>
                                             </tr>
@@ -891,12 +771,12 @@ background:transparent !important;
                                             cellspacing="0" role="presentation" style="width:500px;">
                                             <tr>
                                                 <td class="headline"
-                                                    style="color:#000000; font-family:'Source Sans Pro', sans-serif; font-size:32px; font-weight:600; font-feature-settings:'ss04' on; letter-spacing:-0.03em; line-height:42px; padding-top:20px;">
+                                                    style="color:#000000; font-family:'Source San Pro', sans-serif; font-size:32px; font-weight:600; font-feature-settings:'ss04' on; letter-spacing:-0.03em; line-height:42px; padding-top:20px;">
                                                     {{pod2_headline}}</td>
                                             </tr>
                                             <tr>
-                                                <td class="pod-body"
-                                                    style="color:#2C2C2C; font-family:'Source Sans Pro', sans-serif; font-size:18px; line-height:26px; padding-top:20px;">
+                                                <td
+                                                    style="color:#2C2C2C; font-family:'Source San Pro', sans-serif; font-size:18px; line-height:26px; padding-top:20px;">
                                                     {{pod2_body}}</td>
                                             </tr>
                                             <tr>
@@ -956,18 +836,8 @@ background:transparent !important;
     // ─────────────────────────────────────────────────────────────────────────────
     // State
     // ─────────────────────────────────────────────────────────────────────────────
-    const GOOGLE_FONTS = [
-      'Roboto','Open Sans','Inter','Montserrat','Poppins','Lato',
-      'Playfair Display','Merriweather','Lora','Roboto Slab','Noto Serif','PT Serif'
-    ];
-
     const state = {
       brandName: 'WKND',
-      headlineFont: 'inherit',
-      headlineFontColor: '#000000',
-      bodyFont: 'inherit',
-      bodyFontColor: '#2c2c2c',
-      ctaFont: 'inherit',      
       logoSrc: null,
       logoHeight: 45,
       logoMargin: 40,
@@ -1037,26 +907,8 @@ background:transparent !important;
   margin-top: ${state.logoMargin}px !important;
   margin-bottom: ${state.logoMargin}px !important;
 }
-${state.headlineFont !== 'inherit' ? `.headline { font-family: '${state.headlineFont}', sans-serif !important; }` : ''}
-.headline { color: ${state.headlineFontColor} !important; }
-${state.bodyFont !== 'inherit' ? `.pod-body { font-family: '${state.bodyFont}', sans-serif !important; }` : ''}
-.pod-body { color: ${state.bodyFontColor} !important; }
-${state.ctaFont !== 'inherit' ? `.cta-button { font-family: '${state.ctaFont}', sans-serif !important; }` : ''}
   `.trim();
       doc.head.appendChild(overrideStyle);
-
-      // Inject Google Fonts link for any non-default font selections
-      const fontsToLoad = [...new Set(
-        [state.headlineFont, state.bodyFont].filter(f => f !== 'inherit' && GOOGLE_FONTS.includes(f))
-      )];
-      if (fontsToLoad.length > 0) {
-        const link = doc.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = 'https://fonts.googleapis.com/css2?' +
-          fontsToLoad.map(f => `family=${encodeURIComponent(f)}:wght@400;600;700`).join('&') +
-          '&display=swap';
-        doc.head.insertBefore(link, doc.head.firstChild);
-      }
 
       return '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
     }
@@ -1163,28 +1015,6 @@ ${state.ctaFont !== 'inherit' ? `.cta-button { font-family: '${state.ctaFont}', 
     wireColorPair('cta-border-color', 'cta-border-hex', 'ctaBorderColor');
     wireColorPair('footer-bg-color', 'footer-bg-hex', 'footerBgColor');
     wireColorPair('footer-text-color', 'footer-text-hex', 'footerTextColor');
-
-    // Font selects
-    document.getElementById('headline-font').addEventListener('change', e => {
-      state.headlineFont = e.target.value;
-      updatePreview();
-    });
-    document.getElementById('headline-color').addEventListener('input', e => {
-      state.headlineFontColor = e.target.value;
-      updatePreview();
-    });
-    document.getElementById('body-font').addEventListener('change', e => {
-      state.bodyFont = e.target.value;
-      updatePreview();
-    });
-    document.getElementById('cta-font').addEventListener('change', e => {
-      state.ctaFont = e.target.value;
-      updatePreview();
-    });
-    document.getElementById('body-color').addEventListener('input', e => {
-      state.bodyFontColor = e.target.value;
-      updatePreview();
-    });
 
     // ─────────────────────────────────────────────────────────────────────────────
     // Export
