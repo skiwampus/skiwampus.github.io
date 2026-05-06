@@ -656,7 +656,7 @@ background:transparent !important;
 
         body {
             margin: 0;
-            font-family: 'Source San Pro', sans-serif;
+            font-family: 'Source Sans Pro', sans-serif;
             align-items: center;
         }
         .pod {
@@ -675,7 +675,6 @@ background:transparent !important;
             /* Border color to black */
             padding: 10px 20px;
             text-decoration: none;
-            font-family: 'Source Sans Pro', Arial, sans-serif;
             font-weight: 600;
             /* Semibold */
             font-size: 14px;
@@ -1019,6 +1018,7 @@ background:transparent !important;
   color: ${state.ctaTextColor} !important;
   border: ${state.ctaBorderWidth}px solid ${state.ctaBorderColor} !important;
   border-radius: ${state.ctaBorderRadius}px !important;
+  font-family: ${state.ctaFont}, sans-serif !important;
 }
 .footer-colors {
   background-color: ${state.footerBgColor} !important;
@@ -1047,7 +1047,7 @@ ${state.ctaFont !== 'inherit' ? `.cta-button { font-family: '${state.ctaFont}', 
 
       // Inject Google Fonts link for any non-default font selections
       const fontsToLoad = [...new Set(
-        [state.headlineFont, state.bodyFont].filter(f => f !== 'inherit' && GOOGLE_FONTS.includes(f))
+        [state.headlineFont, state.bodyFont, state.ctaFont].filter(f => f !== 'inherit' && GOOGLE_FONTS.includes(f))
       )];
       if (fontsToLoad.length > 0) {
         const link = doc.createElement('link');
