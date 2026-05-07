@@ -129,7 +129,7 @@
 
     input[type="text"],
     input[type="number"] {
-      width: 100%;
+      width: 25%;
       padding: 6px 9px;
       border: 1px solid #d1d5db;
       border-radius: 5px;
@@ -403,7 +403,7 @@
               <input type="range" id="logo-margin" min="0" max="80" value="40" style="width:100%; accent-color:#1c1c2e;">
             </div>
             <div class="field">
-              <label>Logo Container Background</label>
+              <label>Logo Container Background Color</label>
               <div class="color-row">
                 <div class="color-swatch-wrap"><input type="color" id="logo-bg-color" value="#ffffff"></div>
                 <input type="text" id="logo-bg-hex" class="hex-input" value="#ffffff" maxlength="7">
@@ -442,6 +442,7 @@
                   </select>
                 </div>
                 <div class="color-swatch-wrap"><input type="color" id="headline-color" value="#000000"></div>
+                <input type="text" id="headline-text-hex" class="hex-input" value="#000000" maxlength="7">
               </div>
             </div>
 
@@ -470,6 +471,7 @@
                   </select>
                 </div>
                 <div class="color-swatch-wrap"><input type="color" id="body-color" value="#2c2c2c"></div>
+                <input type="text" id="body-text-hex" class="hex-input" value="#000000" maxlength="7">
               </div>
             </div>
 
@@ -488,7 +490,7 @@
               </div>
             </div>
             <div class="field">
-              <label>CTA Font</label>
+              <label>Font & Color</label>
               <div class="font-row">
                 <div class="font-select-wrap">
                   <select id="cta-font">
@@ -511,6 +513,8 @@
                     </optgroup>
                   </select>
                 </div>
+                <div class="color-swatch-wrap"><input type="color" id="cta-text-color" value="#000000"></div>
+                <input type="text" id="cta-text-hex" class="hex-input" value="#000000" maxlength="7">
               </div>
             </div>
             <div class="field">
@@ -518,13 +522,6 @@
               <div class="color-row">
                 <div class="color-swatch-wrap"><input type="color" id="cta-bg-color" value="#ffffff"></div>
                 <input type="text" id="cta-bg-hex" class="hex-input" value="#ffffff" maxlength="7">
-              </div>
-            </div>
-            <div class="field">
-              <label>Text Color</label>
-              <div class="color-row">
-                <div class="color-swatch-wrap"><input type="color" id="cta-text-color" value="#000000"></div>
-                <input type="text" id="cta-text-hex" class="hex-input" value="#000000" maxlength="7">
               </div>
             </div>
             <div class="field">
@@ -1157,6 +1154,8 @@ ${state.ctaFont !== 'inherit' ? `.cta-button { font-family: '${state.ctaFont}', 
     }
 
     wireColorPair('logo-bg-color', 'logo-bg-hex', 'logoBgColor');
+    wireColorPair('headline-color', 'headline-text-hex', 'headlineFontColor');
+    wireColorPair('body-color', 'body-text-hex', 'bodyFontColor');
     wireColorPair('cta-bg-color', 'cta-bg-hex', 'ctaBgColor');
     wireColorPair('cta-text-color', 'cta-text-hex', 'ctaTextColor');
     wireColorPair('cta-border-color', 'cta-border-hex', 'ctaBorderColor');
