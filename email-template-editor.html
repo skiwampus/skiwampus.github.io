@@ -280,6 +280,26 @@
     .font-row .font-select-wrap { flex: 1; }
     .font-row .color-swatch-wrap { margin-bottom: 1px; }
 
+    .radio-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .radio-row label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #4b5563;
+      cursor: pointer;
+    }
+
+    .radio-row input[type="radio"] {
+      accent-color: #6366f1;
+    }
+
     /* Export button */
     .export-btn {
       width: 100%;
@@ -558,6 +578,9 @@
                 <div class="color-swatch-wrap"><input type="color" id="footer-text-color" value="#ffffff"></div>
                 <input type="text" id="footer-text-hex" class="hex-input" value="#ffffff" maxlength="7">
               </div>
+            </div>
+            <div class="field">
+              <label><input type="checkbox" id="footer-fragment" checked> Include footer content fragment</label>
             </div>
           </div>
         </div>
@@ -932,6 +955,11 @@ background:transparent !important;
                                                                     </p>
                                                                 </td>
                                                             </tr>
+                                                            <tr>
+                                                                <td class='contentFragmentFooter' colspan="2" style="text-align: left;">
+                                                                    <p>{{contentFragmentFooter}}</p>
+                                                                </td>
+                                                            </tr>
                                                         </table>
                                                     </div>
                                                 </td>
@@ -976,6 +1004,7 @@ background:transparent !important;
       ctaBorderRadius: 0,
       footerBgColor: '#000000',
       footerTextColor: '#ffffff',
+      footerFragmentVisible: true,
     };
 
     // Extract original logo src from template
@@ -1055,6 +1084,11 @@ ${state.ctaFont !== 'inherit' ? `.cta-button { font-family: '${state.ctaFont}', 
           fontsToLoad.map(f => `family=${encodeURIComponent(f)}:wght@400;600;700`).join('&') +
           '&display=swap';
         doc.head.insertBefore(link, doc.head.firstChild);
+      }
+
+      const fragmentRow = doc.querySelector('.contentFragmentFooter')?.closest('tr');
+      if (fragmentRow && !state.footerFragmentVisible) {
+        fragmentRow.remove();
       }
 
       return '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
@@ -1184,6 +1218,11 @@ ${state.ctaFont !== 'inherit' ? `.cta-button { font-family: '${state.ctaFont}', 
     });
     document.getElementById('body-color').addEventListener('input', e => {
       state.bodyFontColor = e.target.value;
+      updatePreview();
+    });
+
+    document.getElementById('footer-fragment').addEventListener('change', e => {
+      state.footerFragmentVisible = e.target.checked;
       updatePreview();
     });
 
